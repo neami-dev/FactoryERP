@@ -1,0 +1,378 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Fish_category {
+  id                     Int                      @id @default(autoincrement())
+  name                   String
+  img                    Bytes
+  created_at             DateTime                 @default(now())
+  updated_at             DateTime?                @updatedAt
+  reception              Reception[]
+  wrapping               Wrapping[]
+  weight_type            Weight_type[]
+  wrapping_weight_type   Wrapping_weight_type[]
+  shipping_Fish_category Shipping_Fish_category[]
+
+  @@unique([name])
+  @@index([name], map: "Idx_name")
+}
+
+// Weight_type of reception
+model Weight_type {
+  id                    Int                     @id @default(autoincrement())
+  name                  String
+  fish_category_id      Int
+  order                 Int                     @default(1)
+  created_at            DateTime                @default(now())
+  updated_at            DateTime?               @updatedAt
+  fish_category         Fish_category           @relation(fields: [fish_category_id], references: [id], onDelete: Cascade)
+  reception_weight_fish Reception_weight_fish[]
+
+  @@unique([fish_category_id, name])
+  @@index([fish_category_id], map: "Idx_fish_category_id")
+  @@index([name], map: "Idx_name")
+}
+
+// Weight_type of Wrapping
+model Wrapping_weight_type {
+  id                   Int                    @id @default(autoincrement())
+  name                 String
+  fish_category_id     Int
+  order                Int                    @default(1)
+  created_at           DateTime               @default(now())
+  updated_at           DateTime?              @updatedAt
+  fish_category        Fish_category          @relation(fields: [fish_category_id], references: [id], onDelete: Cascade)
+  wrapping_weight_fish Wrapping_weight_fish[]
+  shipping_weight_fish Shipping_weight_fish[]
+
+  @@unique([fish_category_id, name])
+  @@index([fish_category_id], map: "Idx_fish_category_id")
+  @@index([name], map: "Idx_name")
+}
+
+enum InvoiceStatus {
+  NONE
+  HAVENOT
+  FULL
+}
+
+model Reception {
+  id                   Int           @id @default(autoincrement())
+  supplier_id          Int
+  fish_category_id     Int
+  weigher_id           Int
+  plate_number         String
+  origin               String
+  tare_weight          Float
+  paid_price           Float?
+  untraced_price_kg    Float?
+  isValid              Boolean       @default(false)
+  isFinished           Boolean       @default(false)
+  isFinished_add_trace Boolean       @default(false)
+  isTrace              Boolean       @default(false) // if this reception was just to add invoice of traceability
+  is_wrapped           Boolean       @default(false)
+  weight_taken_in_wrapping     Int?  
+  invoiceStatus        InvoiceStatus @default(NONE)
+  created_at           DateTime      @default(now())
+  updated_at           DateTime?     @updatedAt
+  fish_category        Fish_category @relation(fields: [fish_category_id], references: [id])
+  weigher              User       @relation(fields: [weigher_id], references: [id])
+  supplier             Supplier      @relation(fields: [supplier_id], references: [id])
+
+  invoices              Invoice[]
+  reception_weight_fish Reception_weight_fish[]
+  reception_pricing     Reception_pricing[]
+
+  reception_wrapping Reception_wrapping[]
+
+  @@index([weigher_id], map: "Reception_weigher_id_fkey")
+}
+
+model Reception_pricing {
+  id               Int    @id @default(autoincrement())
+  weight_type_name String
+  reception_id     Int
+  price_kg         Float
+
+  created_at DateTime  @default(now())
+  updated_at DateTime? @updatedAt
+
+  reception Reception @relation(fields: [reception_id], references: [id], onDelete: Cascade)
+
+  @@unique([reception_id, weight_type_name])
+  @@index([reception_id], map: "Idx_reception_id")
+}
+
+model Reception_weight_fish {
+  id             Int         @id @default(autoincrement())
+  reception_id   Int    
+  quality_id     Int          @default(1)
+  weight         Float
+  crate          Int
+  weight_type_id Int
+  created_at     DateTime    @default(now())
+  updated_at     DateTime?   @updatedAt
+  reception      Reception @relation(fields: [reception_id], references: [id],onDelete:Cascade)
+  weight_type    Weight_type @relation(fields: [weight_type_id], references: [id])
+  quality                   Quality   @relation(fields: [quality_id], references: [id])
+
+  @@index([reception_id], map: "Idx_reception_id")
+  @@index([weight_type_id], map: "Idx_weight_type_id")
+}
+
+model Wrapping {
+  id               Int      @id @default(autoincrement())
+  client_id        Int
+  fish_category_id Int
+  weigher_id       Int
+  storage_location String?
+  isValid          Boolean  @default(false)
+  isFinished       Boolean  @default(false)
+  created_at       DateTime @default(now())
+  updated_at       DateTime? @updatedAt
+
+  client               Client                 @relation(fields: [client_id], references: [id])
+  fish_category        Fish_category          @relation(fields: [fish_category_id], references: [id])
+  weigher              User                @relation(fields: [weigher_id], references: [id])
+  reception_wrapping   Reception_wrapping[]
+  wrapping_weight_fish Wrapping_weight_fish[]
+}
+
+model Shipping {
+  id           Int      @id @default(autoincrement())
+  client_id    Int
+  weigher_id   Int
+  plate_number String
+  isValid      Boolean  @default(false)
+  isFinished   Boolean  @default(false)
+  weigher      User  @relation(fields: [weigher_id], references: [id])
+  created_at   DateTime @default(now())
+  updated_at   DateTime? @updatedAt
+  client       Client   @relation(fields: [client_id], references: [id])
+  pallet      Pallet[]
+
+  shipping_Fish_category Shipping_Fish_category[]
+}
+
+model Shipping_Fish_category {
+  id                   Int                    @id @default(autoincrement())
+  shipping_id          Int
+  fish_category_id     Int
+  shipping       Shipping @relation(fields: [shipping_id], references: [id],onDelete: Cascade)
+  fish_category        Fish_category          @relation(fields: [fish_category_id], references: [id])
+  shipping_weight_fish Shipping_weight_fish[]
+  
+
+  @@unique([shipping_id, fish_category_id])
+}
+model Quality {
+  id      Int                    @id @default(autoincrement())
+  title  String @unique()
+  code   String @unique()
+  created_at   DateTime @default(now())
+  updated_at   DateTime? @updatedAt
+  shipping_weight_fish Shipping_weight_fish[]
+  reception_weight_fish Reception_weight_fish[]
+  wrapping_weight_fish Wrapping_weight_fish[]
+}
+model Pallet {
+  id             Int      @id @default(autoincrement())
+  shipping_id    Int
+  pallet_number  Int
+  created_at     DateTime @default(now())
+  updated_at     DateTime? @updatedAt
+  is_closed        Boolean @default(false)
+  is_validated       Boolean @default(false)
+
+  shipping       Shipping @relation(fields: [shipping_id], references: [id],onDelete: Cascade)
+  shipping_weight_fish        Shipping_weight_fish[]
+
+  @@unique([shipping_id, pallet_number])
+}
+
+model Shipping_weight_fish {
+  id                        Int                    @id @default(autoincrement())
+  shipping_Fish_category_id Int
+  wrapping_weight_type_id   Int
+  pallet_id                 Int                  
+  quality_id                Int
+  weight                    Float
+  box                       Int
+  box_type                  Box_type
+  wrapping_type             Wrapping_type
+  created_at                DateTime               @default(now())
+  updated_at                DateTime?              @updatedAt
+  pallet                   Pallet                  @relation(fields: [pallet_id], references: [id],onDelete: Cascade)
+  shipping_Fish_category    Shipping_Fish_category @relation(fields: [shipping_Fish_category_id], references: [id],onDelete: Cascade)
+  wrapping_weight_type      Wrapping_weight_type   @relation(fields: [wrapping_weight_type_id], references: [id])
+  quality                   Quality   @relation(fields: [quality_id], references: [id],onDelete: Cascade)
+}
+
+model Reception_wrapping {
+  id           Int       @id @default(autoincrement())
+  reception_id Int
+  wrapping_id  Int
+  reception    Reception @relation(fields: [reception_id], references: [id],onDelete:Cascade)
+  wrapping     Wrapping  @relation(fields: [wrapping_id], references: [id],onDelete:Cascade)
+
+  @@unique([reception_id, wrapping_id])
+}
+
+enum Box_type {
+  CELLOPHANE
+  CARTON
+}
+
+enum Wrapping_type {
+  BLOCK
+  IQF
+}
+
+model Wrapping_weight_fish {
+  id                      Int                  @id @default(autoincrement())
+  wrapping_id             Int
+  quality_id              Int @default(1)
+  wrapping_weight_type_id Int
+  weight                  Float
+  box                     Int
+  box_type                Box_type
+  wrapping_type           Wrapping_type
+  created_at              DateTime             @default(now())
+  updated_at              DateTime?            @updatedAt
+  wrapping     Wrapping  @relation(fields: [wrapping_id], references: [id],onDelete:Cascade)
+  wrapping_weight_type    Wrapping_weight_type @relation(fields: [wrapping_weight_type_id], references: [id])
+  quality                   Quality   @relation(fields: [quality_id], references: [id],onDelete: Cascade)
+}
+
+model Company {
+  id       Int       @id @default(autoincrement())
+  name     String
+  code     String
+  invoices Invoice[]
+
+  @@unique([name])
+}
+
+model Invoice {
+  id           Int       @id @default(autoincrement())
+  total_weight Float
+  created_at   DateTime  @default(now())
+  updated_at   DateTime? @updatedAt
+  trace_code   String
+  reception_id Int
+  company_id   Int
+
+  reception Reception @relation(fields: [reception_id], references: [id], onDelete: Cascade)
+  company   Company   @relation(fields: [company_id], references: [id])
+
+  @@index([reception_id], map: "Idx_reception_id")
+}
+
+model Permission {
+  id         Int       @id @default(autoincrement())
+  name       String    @unique
+  description String?
+  category_id   Int
+  is_active  Boolean   @default(true)
+  created_at DateTime  @default(now())
+  updated_at DateTime? @updatedAt
+  roles      Role[]    @relation("RolePermission")
+  category   Permission_category      @relation(fields: [category_id], references: [id], onDelete: Cascade)
+
+}
+model Permission_category{
+  id         Int       @id @default(autoincrement())
+  name       String    @unique
+  permission Permission[]
+}
+model Role {
+  id          Int          @id @default(autoincrement())
+  name        String       @unique
+  description String?
+  is_active  Boolean   @default(true)
+  permissions Permission[] @relation("RolePermission")
+  created_at  DateTime     @default(now())
+  updated_at  DateTime?    @updatedAt
+  users     User[]
+}
+
+enum Gender {
+  MALE
+  FEMALE
+}
+model User{
+  id            Int       @id @default(autoincrement())
+  username      String    @unique
+  email         String    @unique
+  password      String
+  person_id     Int         @unique
+  role_id       Int
+  auth_allowed  Boolean   @default(false)
+  soft_delete   Boolean   @default(false)
+  role          Role      @relation(fields: [role_id], references: [id])
+  person        Person      @relation(fields: [person_id], references: [id])
+  shipping      Shipping[]
+  reception     Reception[]
+  wrapping      Wrapping[]
+  passowrd_reset_token Passowrd_reset_token []
+}
+model Person {
+  id            Int       @id @default(autoincrement())
+  firstname     String
+  lastname      String
+  phone_number  String?
+  address       String?
+  gender        Gender?
+  date_of_birth DateTime?
+  created_at    DateTime  @default(now())
+  updated_at    DateTime? @updatedAt
+  soft_delete   Boolean   @default(false)
+ 
+  supplier      Supplier?
+  client        Client?
+  user          User?
+}
+
+ 
+
+model Supplier {
+  id         Int         @id @default(autoincrement())
+  person_id  Int         @unique
+  created_at DateTime    @default(now())
+  updated_at DateTime?   @updatedAt
+  person     Person      @relation(fields: [person_id], references: [id], onDelete: Cascade)
+  receptions Reception[]
+}
+
+enum Client_type {
+  STOCK
+  BUYER
+  SUPPLIER
+}
+
+model Client {
+  id          Int         @id @default(autoincrement())
+  person_id   Int         @unique
+  client_type Client_type @default(STOCK)
+  created_at  DateTime    @default(now())
+  updated_at  DateTime    @updatedAt
+  person      Person      @relation(fields: [person_id], references: [id], onDelete: Cascade)
+  wrapping    Wrapping[]
+  shipping    Shipping[]
+}
+
+model Passowrd_reset_token {
+  id        Int   @id @default(autoincrement())
+  token      String   @unique
+  userId     Int
+  user       User     @relation(fields: [userId], references: [id],onDelete: Cascade)
+  expires    DateTime
+  created_at DateTime @default(now())
+  @@index([userId], map: "Idx_user_id")
+}
