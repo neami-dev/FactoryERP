@@ -52,10 +52,10 @@ import {
 import { Input } from "@/components/ui/input";
 import React, { useState } from "react";
 import Image from "next/image";
-import { dataTagSymbol, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import { ArrowLeft, ArrowRight, Plus } from "lucide-react";
 import UserForm from "./UserForm";
-import { deleteUser, getAllUsers } from "@/lib/actions/user.actions";
+import { deleteUser } from "@/lib/actions/user.actions";
 import { toast } from "sonner";
 import HasPermissions from "../auth/HasPermissions";
 
@@ -88,12 +88,7 @@ export function UsersTable<TData, TValue>({
   const queryClient = useQueryClient();
 
   const limit = 10;
-  // const { data: userRseponse,isFetched } = useQuery({
-  //   queryKey: ["users", page, limit, lastnameOrFistname],
-  //   queryFn: async () => await getAllUsers({ page, limit,lastnameOrFistname }),
-  //   initialData: data,
-  //   refetchInterval: 2000,
-  // });
+
 
   const handleManualRefetch = () => {
     queryClient.invalidateQueries({
@@ -165,9 +160,9 @@ export function UsersTable<TData, TValue>({
                       {header.isPlaceholder
                         ? null
                         : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
                     </TableHead>
                   );
                 })}
@@ -275,22 +270,22 @@ export function UsersTable<TData, TValue>({
                   colSpan={columns.length}
                   className="h-24 text-center"
                 >
-                   {  
-                   
+                  {
+
                     data?.total === 0 ? (
                       <h2 className="text-base font-semibold">
                         Aucun résultat.
                       </h2>
-                    ):
-                  <div className="w-full h-[300px] flex justify-center items-center">
-                    <Image
-                      src="/icons/infinite-spinner-loading.svg"
-                      alt="loading"
-                      width={100}
-                      height={100}
-                    />
-                  </div>
-                    }
+                    ) :
+                      <div className="w-full h-[300px] flex justify-center items-center">
+                        <Image
+                          src="/icons/infinite-spinner-loading.svg"
+                          alt="loading"
+                          width={100}
+                          height={100}
+                        />
+                      </div>
+                  }
                 </TableCell>
               </TableRow>
             )}
