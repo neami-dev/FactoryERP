@@ -52,7 +52,7 @@ import {
 import { Input } from "@/components/ui/input";
 import React, { useState } from "react";
 import Image from "next/image";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { dataTagSymbol, useQuery, useQueryClient } from "@tanstack/react-query";
 import { ArrowLeft, ArrowRight, Plus } from "lucide-react";
 import UserForm from "./UserForm";
 import { deleteUser, getAllUsers } from "@/lib/actions/user.actions";
@@ -88,12 +88,12 @@ export function UsersTable<TData, TValue>({
   const queryClient = useQueryClient();
 
   const limit = 10;
-  const { data: userRseponse,isFetched } = useQuery({
-    queryKey: ["users", page, limit, lastnameOrFistname],
-    queryFn: async () => await getAllUsers({ page, limit,lastnameOrFistname }),
-    initialData: data,
-    refetchInterval: 2000,
-  });
+  // const { data: userRseponse,isFetched } = useQuery({
+  //   queryKey: ["users", page, limit, lastnameOrFistname],
+  //   queryFn: async () => await getAllUsers({ page, limit,lastnameOrFistname }),
+  //   initialData: data,
+  //   refetchInterval: 2000,
+  // });
 
   const handleManualRefetch = () => {
     queryClient.invalidateQueries({
@@ -101,7 +101,7 @@ export function UsersTable<TData, TValue>({
     });
   };
   const table = useReactTable({
-    data: userRseponse?.data as TData[],
+    data: data?.data as TData[],
     columns: columns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
@@ -178,7 +178,7 @@ export function UsersTable<TData, TValue>({
             ))}
           </TableHeader>
           <TableBody>
-            {userRseponse?.total || 0 > 0 ? (
+            {data?.total || 0 > 0 ? (
               table.getRowModel().rows.map((row) => (
                 <TableRow
                   key={row.id}
@@ -276,8 +276,8 @@ export function UsersTable<TData, TValue>({
                   className="h-24 text-center"
                 >
                    {  
-                    isFetched &&
-                    userRseponse?.total === 0 ? (
+                   
+                    data?.total === 0 ? (
                       <h2 className="text-base font-semibold">
                         Aucun résultat.
                       </h2>
@@ -303,15 +303,15 @@ export function UsersTable<TData, TValue>({
         <span className="text-sm text-gray-700 dark:text-gray-400">
           Page{" "}
           <span className="font-semibold text-gray-900 dark:text-white">
-            {userRseponse?.page}
+            {data?.page}
           </span>{" "}
           sur{" "}
           <span className="font-semibold text-gray-900 dark:text-white">
-            {userRseponse?.totalPages}
+            {data?.totalPages}
           </span>{" "}
           —{" "}
           <span className="font-semibold text-gray-900 dark:text-white">
-            {userRseponse?.total}
+            {data?.total}
           </span>{" "}
           entrées au total
         </span>
@@ -331,8 +331,8 @@ export function UsersTable<TData, TValue>({
               setPage((prev) => Math.min(prev + 1, data?.totalPages || 1))
             }
             disabled={
-              (page === userRseponse?.totalPages ||
-                userRseponse?.totalPages === 0) &&
+              (page === data?.totalPages ||
+                data?.totalPages === 0) &&
               true
             }
           >

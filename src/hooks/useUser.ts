@@ -19,5 +19,6 @@ export default function useUser(): UseQueryResult<IUser, Error> {
       return sessionRes;
     },
     enabled: !!userId,
+    refetchOnWindowFocus: false,
   });
 }

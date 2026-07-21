@@ -5,6 +5,7 @@ import { SessionProvider } from "next-auth/react";
 // import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { useState } from "react";
 import AuthGuard from "./AuthGuard";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 // import CheckHasPermission from "./CheckHasPermission";
 
 
