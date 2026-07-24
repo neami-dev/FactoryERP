@@ -1,7 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
 import { InvoiceDashboardSkeleton } from "./InvoiceDashboardSkeleton";
-import { InvoiceFilters } from "./InvoiceFilters";
 import { InvoiceKPICards } from "./InvoiceKPICardsProps";
 import { InvoiceComparison } from "./InvoiceComparison";
 import { InvoiceCharts } from "./InvoiceCharts";
