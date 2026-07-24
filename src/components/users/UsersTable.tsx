@@ -79,7 +79,7 @@ export function UsersTable<TData, TValue>({
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   );
-console.log(data);
+
 
   const [page, setPage] = useState(1);
   const [lastnameOrFistname, setLastnameOrFistname] = useState("");

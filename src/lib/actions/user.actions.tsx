@@ -216,6 +216,8 @@ export async function getAllUsers({
   | undefined
 > {
   try {
+    console.log(lastnameOrFistname);
+    
     const skip = (page - 1) * limit;
     const [users] = await Promise.all([
       await prisma.user.findMany({

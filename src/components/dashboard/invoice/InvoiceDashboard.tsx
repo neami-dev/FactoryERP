@@ -9,11 +9,11 @@ import { IncompleteInvoicesTable } from "./IncompleteInvoicesTable";
 
 export function InvoiceDashboard() {
   const [isLoading, setIsLoading] = useState(true);
-  const [filters, setFilters] = useState({
-    dateRange: "current-month",
-    company: "all",
-    category: "all",
-  });
+  // const [filters, setFilters] = useState({
+  //   dateRange: "current-month",
+  //   company: "all",
+  //   category: "all",
+  // });
 
   useEffect(() => {
     // Simuler un chargement de données
