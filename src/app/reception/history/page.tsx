@@ -11,7 +11,7 @@ export default async function History() {
     <>
       <Header text="Accueil" showPackIcon={true} />
       <section className="flex w-full flex-col py-3 px-2 items-center justify-center">
-        <h2 className="capitalize text-xl lg:text-3xl font-semibold py-3 lg:py-6  text-[#3354f4]">
+        <h2 className="capitalize text-xl lg:text-3xl font-semibold py-3 text-[#3354f4]">
           réceptions inachevées
         </h2>
 

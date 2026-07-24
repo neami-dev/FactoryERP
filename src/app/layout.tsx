@@ -3,6 +3,8 @@ import { Roboto } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
 import { Providers } from "../lib/providers";
+import { SpeedInsights } from "@vercel/speed-insights/next";
+import { Analytics } from "@vercel/analytics/next"
 
 const roboto = Roboto({
   variable: "--font-poboto",
@@ -17,8 +19,8 @@ export const metadata: Metadata = {
     index: false,
     follow: false,
   },
-  icons:{
-    icon:"/icons/big-tuna.svg"
+  icons: {
+    icon: "/icons/big-tuna.svg"
   }
 };
 
@@ -30,6 +32,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${roboto.className}  antialiased`}>
+        <SpeedInsights />
+        <Analytics/>
         <Providers>{children}</Providers>
 
         <Toaster

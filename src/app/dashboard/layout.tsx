@@ -23,7 +23,7 @@ export default function Dashboradlayout({
   return (
     <SidebarProvider className=" w-full overflow-x-hidden">
       <DashboardSidebar />
-      <main className="w-full flex flex-col">
+      <main className="w-[calc(100%-256px)] flex flex-col">
         <div className="  bg-amber-50 w-[50px]  relative z-50 ">
           <SidebarTrigger className="absolute left-3 top-3 " />
         </div>{" "}

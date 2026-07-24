@@ -32,14 +32,14 @@ export function InvoiceDashboard() {
     <div className="space-y-6 animate-fade-in p-4">
       <div className="flex flex-col space-y-4 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">
+          <h1 className="text-xl lg:text-2xl font-bold text-gray-900">
             Tableau de Bord Factures
           </h1>
           <p className="text-gray-600">
             Suivi des factures et analyse des revenus
           </p>
         </div>
-        <InvoiceFilters filters={filters} onFiltersChange={setFilters} />
+        {/* <InvoiceFilters filters={filters} onFiltersChange={setFilters} /> */}
       </div>
 
       {/* KPI Cards */}

@@ -12,7 +12,7 @@ type FishCategoryProps = {
 export default function FishCategory({ fishcategories }: FishCategoryProps) {
   const router = useRouter();
   return (
-    <div className=" flex flex-wrap h-full max-w-3xl  items-center justify-center gap-6 w-full">
+    <div className=" flex flex-wrap max-w-3xl  items-center justify-center gap-6 w-full">
       {fishcategories?.length === 0 && (
         <div className="text-center text-gray-500 col-span-2 md:col-span-3">
           Aucune espace disponible.

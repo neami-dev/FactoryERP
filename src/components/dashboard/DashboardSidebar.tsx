@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/sidebar";
 import {
   ArrowsUpFromLine,
+  ChartNoAxesCombined,
   ChevronsUpDownIcon,
   LayoutDashboard,
   PackageCheck,
@@ -37,9 +38,8 @@ export function DashboardSidebar() {
         <SidebarGroup className=" py-2 mt-2 ">
           <div className="flex flex-col gap-6 font-medium text-gray-500 pt-8  items-center">
             <Link
-              className={`flex w-full pl-7 items-center py-2 rounded-md gap-4 hover:text-[#3354f4] ${
-                pathname === "/dashboard" && "bg-[#3353f41b] text-[#3354f4]"
-              }`}
+              className={`flex w-full pl-7 items-center py-2 rounded-md gap-4 hover:text-[#3354f4] ${pathname === "/dashboard" && "bg-[#3353f41b] text-[#3354f4]"
+                }`}
               href={"/dashboard"}
             >
               <LayoutDashboard className="text-[#3354f4]" />{" "}
@@ -65,10 +65,9 @@ export function DashboardSidebar() {
                         {" "}
                         <Link
                           href={`/dashboard/reception`}
-                          className={`rounded-md hover:bg-[#ececee73] my-2 flex gap-3 ml-14 ${
-                            pathname === "/dashboard/reception" &&
+                          className={`rounded-md hover:bg-[#ececee73] my-2 flex gap-3 ml-14 ${pathname === "/dashboard/reception" &&
                             "bg-[#3353f41b] text-[#3354f4]"
-                          }  px-4 py-2 font-mono text-base `}
+                            }  px-4 py-2 font-mono text-base `}
                         >
                           <Image
                             src="/icons/view-list.svg"
@@ -82,10 +81,9 @@ export function DashboardSidebar() {
                       <HasPermissions permissions={["show_price:reception"]}>
                         <Link
                           href={`/dashboard/reception/add-price`}
-                          className={`rounded-md hover:bg-[#ececee73] my-2 flex gap-3 ml-14 ${
-                            pathname === "/dashboard/reception/add-price" &&
+                          className={`rounded-md hover:bg-[#ececee73] my-2 flex gap-3 ml-14 ${pathname === "/dashboard/reception/add-price" &&
                             "bg-[#3353f41b] text-[#3354f4]"
-                          }  px-4 py-2 font-mono text-base `}
+                            }  px-4 py-2 font-mono text-base `}
                         >
                           <Image
                             src="/icons/add-price.svg"
@@ -101,15 +99,25 @@ export function DashboardSidebar() {
                 </Collapsible>
               </SidebarMenu>
             </HasPermissions>
+
+            {" "}
+            <Link
+              className={`rounded-md hover:bg-[#ececee73] pl-6   flex gap-4 w-full ${pathname === "/dashboard/invoice" &&
+                "bg-[#3353f41b] text-[#3354f4]"
+                }  px-4 py-2 font-mono text-base `}
+              href={"/dashboard/invoice"}
+            >
+              <ChartNoAxesCombined className="text-[#3354f4]" /> Analyse des revenus
+            </Link>
+
             <HasPermissions
               permissions={["details:wrapping", "validate:wrapping"]}
             >
               {" "}
               <Link
-                className={`rounded-md hover:bg-[#ececee73] pl-6   flex gap-4 w-full ${
-                  pathname === "/dashboard/wrapping" &&
+                className={`rounded-md hover:bg-[#ececee73] pl-6   flex gap-4 w-full ${pathname === "/dashboard/wrapping" &&
                   "bg-[#3353f41b] text-[#3354f4]"
-                }  px-4 py-2 font-mono text-base `}
+                  }  px-4 py-2 font-mono text-base `}
                 href={"/dashboard/wrapping"}
               >
                 <PackageCheck className="text-[#3354f4]" /> Emballage
@@ -120,10 +128,9 @@ export function DashboardSidebar() {
             >
               {" "}
               <Link
-                className={`rounded-md hover:bg-[#ececee73] pl-6   flex gap-4 w-full ${
-                  pathname === "/dashboard/shipping" &&
+                className={`rounded-md hover:bg-[#ececee73] pl-6   flex gap-4 w-full ${pathname === "/dashboard/shipping" &&
                   "bg-[#3353f41b] text-[#3354f4]"
-                }  px-4 py-2 font-mono text-base `}
+                  }  px-4 py-2 font-mono text-base `}
                 href={"/dashboard/shipping"}
               >
                 <ArrowsUpFromLine className="text-[#3354f4]" /> Expédition
@@ -131,10 +138,9 @@ export function DashboardSidebar() {
             </HasPermissions>
             <HasPermissions permissions={["manage:fish_category"]}>
               <Link
-                className={`rounded-md hover:bg-[#ececee73] pl-6   flex gap-4 w-full ${
-                  pathname === "/dashboard/fish-category" &&
+                className={`rounded-md hover:bg-[#ececee73] pl-6   flex gap-4 w-full ${pathname === "/dashboard/fish-category" &&
                   "bg-[#3353f41b] text-[#3354f4]"
-                }  px-4 py-2 font-mono text-base `}
+                  }  px-4 py-2 font-mono text-base `}
                 href={"/dashboard/fish-category"}
               >
                 <Image
@@ -148,10 +154,9 @@ export function DashboardSidebar() {
             </HasPermissions>
             <HasPermissions permissions={["manage:quality_fish"]}>
               <Link
-                className={`rounded-md hover:bg-[#ececee73] pl-6   flex gap-4 items-center w-full ${
-                  pathname === "/dashboard/quality" &&
+                className={`rounded-md hover:bg-[#ececee73] pl-6   flex gap-4 items-center w-full ${pathname === "/dashboard/quality" &&
                   "bg-[#3353f41b] text-[#3354f4]"
-                }  px-4 py-2 font-mono text-base `}
+                  }  px-4 py-2 font-mono text-base `}
                 href={"/dashboard/quality"}
               >
                 <Image
@@ -173,10 +178,9 @@ export function DashboardSidebar() {
             >
               {" "}
               <Link
-                className={`rounded-md hover:bg-[#ececee73] pl-6   flex gap-4 items-center w-full ${
-                  pathname === "/dashboard/users" &&
+                className={`rounded-md hover:bg-[#ececee73] pl-6   flex gap-4 items-center w-full ${pathname === "/dashboard/users" &&
                   "bg-[#3353f41b] text-[#3354f4]"
-                }  px-4 py-2 font-mono text-base `}
+                  }  px-4 py-2 font-mono text-base `}
                 href={"/dashboard/users"}
               >
                 <User className="text-[#3354f4]" />
@@ -199,10 +203,9 @@ export function DashboardSidebar() {
               permissions={["create:role", "delete:role", "update:role"]}
             >
               <Link
-                className={`rounded-md hover:bg-[#ececee73] pl-6   flex gap-4 items-center w-full ${
-                  pathname === "/dashboard/authorization" &&
+                className={`rounded-md hover:bg-[#ececee73] pl-6   flex gap-4 items-center w-full ${pathname === "/dashboard/authorization" &&
                   "bg-[#3353f41b] text-[#3354f4]"
-                }  px-4 py-2 font-mono text-base `}
+                  }  px-4 py-2 font-mono text-base `}
                 href={"/dashboard/authorization"}
               >
                 <Image src="/icons/role.svg" alt="rol" width={25} height={25} />

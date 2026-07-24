@@ -217,25 +217,25 @@ export async function getAllUsers({
 > {
   try {
     const skip = (page - 1) * limit;
-    const [users, total] = await Promise.all([
+    const [users] = await Promise.all([
       await prisma.user.findMany({
-        where: {
-          soft_delete: false,
-          person: {
-            OR: [
-              {
-                firstname: {
-                  contains: lastnameOrFistname?.toLowerCase(),
-                },
-              },
-              {
-                lastname: {
-                  contains: lastnameOrFistname?.toLowerCase(),
-                },
-              },
-            ],
-          },
-        },
+        // where: {
+        //   soft_delete: false,
+        //   person: {
+        //     OR: [
+        //       {
+        //         firstname: {
+        //           contains: lastnameOrFistname?.toLowerCase(),
+        //         },
+        //       },
+        //       {
+        //         lastname: {
+        //           contains: lastnameOrFistname?.toLowerCase(),
+        //         },
+        //       },
+        //     ],
+        //   },
+        // },
         include: {
           role: true,
           person: true,
@@ -248,31 +248,14 @@ export async function getAllUsers({
         skip,
         take: limit,
       }),
-      await prisma.user.count({
-        where: {
-          person: {
-            OR: [
-              {
-                firstname: {
-                  contains: lastnameOrFistname?.toLowerCase(),
-                },
-              },
-              {
-                lastname: {
-                  contains: lastnameOrFistname?.toLowerCase(),
-                },
-              },
-            ],
-          },
-        },
-      }),
+       
     ]);
 
     return {
       data: users as IUser[],
-      total,
+      total: users.length,
       page,
-      totalPages: Math.ceil(total / limit),
+      totalPages: Math.ceil(users.length / limit),
     };
   } catch (error) {
     handleError(error);

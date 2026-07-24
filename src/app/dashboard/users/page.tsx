@@ -7,6 +7,9 @@ import { getAllUsers } from "@/lib/actions/user.actions";
 export default async function page() {
   const allUsers = await getAllUsers({});
   const allRoles = await getAllRoles();
+
+  console.log(allUsers);
+  
  
 
   return (

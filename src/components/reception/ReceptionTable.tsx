@@ -83,7 +83,7 @@ export function ReceptionTable<TData, TValue>({
   });
 
   return (
-    <section className="w-full p-5">
+    <section className=" p-5">
       <div className="flex  items-center justify-between py-4">
         <GoBack />
         <Input
@@ -228,6 +228,7 @@ export function ReceptionTable<TData, TValue>({
           </Button>
         </div>
       </div>
+      
     </section>
   );
 }

@@ -11,7 +11,7 @@ export default async function Fishcategory() {
         <GoBack />
       </div>
       <div className="w-fit h-fit relative">
-        <h2 className=" md:text-xl lg:text-2xl text-[#3354f4] text-center font-semibold py-16">
+        <h2 className=" md:text-xl lg:text-2xl text-[#3354f4] text-center font-semibold py-12">
           Toutes les Catégories de Poissons
         </h2>
         <FishCategory fishcategories={allCategories?.data} />
