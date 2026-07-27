@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useReceptionsInfos } from "@/hooks/useReceptionsInfos";
 import { Package, Package2, Scale, DollarSign } from "lucide-react";
 import { Skeleton } from "../ui/skeleton";
+import { formatFloat } from "@/lib/utils";
 
 export default function KPICards({
   period = "month",
@@ -47,7 +48,7 @@ export default function KPICards({
     },
     {
       title: "Revenus Totaux",
-      value: `${data?.totalPrice} Dh`,
+      value: `${formatFloat(data?.totalPrice ?? 0 * 1)} Dh`,
       subtitle: "des factures",
       icon: DollarSign,
       trend: "+23%",
